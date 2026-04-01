@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 public class TestServiceImpl implements TestService {
 
     private final IOService ioService;
+
     private final QuestionDao questionDao;
 
     public TestServiceImpl(IOService ioService, QuestionDao questionDao) {
@@ -25,7 +26,6 @@ public class TestServiceImpl implements TestService {
         questionDao.findAll().stream()
                 .flatMap(this::formatQuestionWithAnswer)
                 .forEach(System.out::println);
-
     }
 
     private Stream<String> formatQuestionWithAnswer(Question question) {
