@@ -26,7 +26,6 @@ public class TestServiceImpl implements TestService {
         questionDao.findAll().stream()
                 .flatMap(this::formatQuestionWithAnswer)
                 .forEach(System.out::println);
-
     }
 
     private Stream<String> formatQuestionWithAnswer(Question question) {
