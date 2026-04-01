@@ -24,7 +24,9 @@ public class CsvQuestionDao implements QuestionDao {
         String fileName = fileNameProvider.getTestFileName();
 
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName)) {
-            if (isNull(inputStream)) throw new QuestionReadException(String.format("File not found: %s", fileName));
+            if (isNull(inputStream)) {
+                throw new QuestionReadException(String.format("File not found: %s", fileName));
+            }
 
             var questions = new CsvToBeanBuilder<QuestionDto>(new InputStreamReader(inputStream))
                     .withType(QuestionDto.class)

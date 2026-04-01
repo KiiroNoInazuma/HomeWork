@@ -1,6 +1,6 @@
 package ru.app.work.service;
 
-public class TestRunnerServiceImpl implements TestRunnerService{
+public class TestRunnerServiceImpl implements TestRunnerService {
 
     private final TestService testService;
 
