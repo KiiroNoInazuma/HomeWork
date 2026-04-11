@@ -1,46 +1,42 @@
 package ru.app.work.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.app.work.dao.QuestionDao;
-import ru.app.work.domain.Answer;
-import ru.app.work.domain.Question;
+import ru.app.work.domain.Student;
+import ru.app.work.domain.TestResult;
 
-import java.util.ArrayList;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
+@RequiredArgsConstructor
+@Service
 public class TestServiceImpl implements TestService {
 
     private final IOService ioService;
 
     private final QuestionDao questionDao;
 
-    public TestServiceImpl(IOService ioService, QuestionDao questionDao) {
-        this.ioService = ioService;
-        this.questionDao = questionDao;
-    }
 
     @Override
-    public void executeTest() {
+    public TestResult executeTestFor(Student student) {
         ioService.printLine("");
         ioService.printFormattedLine("Please answer the questions below%n");
-        questionDao.findAll().stream()
-                .flatMap(this::formatQuestionWithAnswer)
-                .forEach(System.out::println);
-    }
+        var questions = questionDao.findAll();
+        var testResult = new TestResult(student);
 
-    private Stream<String> formatQuestionWithAnswer(Question question) {
-        var lines = new ArrayList<String>();
-        lines.add(String.format("%s: %s", Question.class.getSimpleName(), question.text()));
-        IntStream.range(0, question.answers().size())
-                .mapToObj(j -> String.format("%s (%d): %s%n isCorrect=%s",
-                        Answer.class.getSimpleName(),
-                        j + 1,
-                        question.answers().get(j).text(),
-                        question.answers().get(j).isCorrect()))
-                .forEach(lines::add);
+        for (var question : questions) {
+            ioService.printLine(question.text());
+            var answers = question.answers();
+            IntStream.range(0, answers.size())
+                    .forEach(i -> ioService.printFormattedLine("%d. %s", i + 1, answers.get(i).text()));
 
-        lines.add("");
+            int answerNumber = ioService.readIntForRangeWithPrompt(1, answers.size(),
+                    "Your answer (enter number):",
+                    "Invalid input. Please enter a number between 1 and " + answers.size());
 
-        return lines.stream();
+            var isAnswerValid = answers.get(answerNumber - 1).isCorrect();
+            testResult.applyAnswer(question, isAnswerValid);
+        }
+        return testResult;
     }
 }

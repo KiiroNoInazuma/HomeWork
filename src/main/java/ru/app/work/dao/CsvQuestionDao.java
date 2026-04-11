@@ -2,6 +2,7 @@ package ru.app.work.dao;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 import ru.app.work.config.TestFileNameProvider;
 import ru.app.work.dao.dto.QuestionDto;
 import ru.app.work.domain.Question;
@@ -15,6 +16,7 @@ import java.util.List;
 import static java.util.Objects.isNull;
 
 @RequiredArgsConstructor
+@Repository
 public class CsvQuestionDao implements QuestionDao {
 
     private final TestFileNameProvider fileNameProvider;
