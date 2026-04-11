@@ -1,15 +1,22 @@
 package ru.app.work.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@RequiredArgsConstructor
+@Service
 public class TestRunnerServiceImpl implements TestRunnerService {
 
     private final TestService testService;
 
-    public TestRunnerServiceImpl(TestService testService) {
-        this.testService = testService;
-    }
+    private final StudentService studentService;
+
+    private final ResultService resultService;
 
     @Override
     public void run() {
-        testService.executeTest();
+        var student = studentService.determineCurrentStudent();
+        var testResult = testService.executeTestFor(student);
+        resultService.showResult(testResult);
     }
 }
