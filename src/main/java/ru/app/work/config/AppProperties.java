@@ -1,22 +1,31 @@
 package ru.app.work.config;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import java.util.Locale;
+import java.util.Map;
 
 
 @Data
 @Component
-public class AppProperties implements TestFileNameProvider, TestConfig {
+@ConfigurationProperties(prefix = "ru.app.work")
+public class AppProperties implements TestFileNameProvider, TestConfig, LocalConfig {
 
     private int rightAnswersCountToPass;
 
-    private String testFileName;
+    private Locale locale;
 
-    public AppProperties(@Value("${test.rightAnswersCountToPass}") int rightAnswersCountToPass,
-                         @Value("${test.fileName}") String testFileName) {
-        this.rightAnswersCountToPass = rightAnswersCountToPass;
-        this.testFileName = testFileName;
+    private Map<String, String> fileNameByLocaleTag;
+
+    public void setLocale(String locale){
+        this.locale = Locale.forLanguageTag(locale);
+    }
+
+    @Override
+    public String getTestFileName() {
+        return fileNameByLocaleTag.get(locale.toLanguageTag());
     }
 }
 

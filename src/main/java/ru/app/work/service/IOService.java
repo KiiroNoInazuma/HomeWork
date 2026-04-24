@@ -4,7 +4,9 @@ public interface IOService {
 
     void printLine(String s);
 
-    void printFormattedLine(String s, Object ...args);
+    void printFormattedLine(String s, Object... args);
+
+    String readString();
 
     String readStringWithPrompt(String prompt);
 
