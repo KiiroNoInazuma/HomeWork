@@ -30,7 +30,7 @@ public class TestServiceImpl implements TestService {
             IntStream.range(0, answers.size())
                     .forEach(i -> ioService.printFormattedLine("%d. %s", i + 1, answers.get(i).text()));
 
-            int answerNumber = ioService.readIntForRangeWithPromptLocalized(1, answers.size(),
+            int answerNumber = ioService.readIntForRangeWithPrompt(1, answers.size(),
                     "Your answer (enter number):",
                     "Invalid input. Please enter a number between 1 and " + answers.size());
 
